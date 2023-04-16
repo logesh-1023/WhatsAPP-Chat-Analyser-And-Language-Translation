@@ -24,7 +24,7 @@ import emoji
 from collections import Counter
 from whatsappSendMessage import sendMessage
 from flask import Flask,render_template,request
-
+Email=""
 app=Flask(__name__,template_folder='template')
 @app.route("/")
 def home():
@@ -38,7 +38,34 @@ def webhook():
     print(message)
     print(senderID)
     res = sendMessage(senderId=senderID, message=message)
-    print (res)
+    print(res)
+    TEXT=""
+    vulgarWords=[]
+    mes_word=re.split(" ",message)
+    vulgarPresent=[]
+    file=open('bad-words.csv')
+    type(file)
+    csvreader=csv.reader(file)
+    for row in csvreader:
+        vulgarWords.append(row[0])
+    for i in mes_word:
+        for j in vulgarWords:
+            if i==j:
+                vulgarPresent.append(j)
+    for i in vulgarPresent:
+        TEXT=TEXT+"ABUSIVE WORD RECEIVED:"+i+"\n" 
+
+    TEXT="This is the Person abused me : "+senderID+"\n"+TEXT
+    if len(vulgarPresent)!=0:
+        print(vulgarPresent)
+        email="logeshs91@gmail.com"
+        import smtplib
+        server=smtplib.SMTP_SSL("smtp.gmail.com",465)
+        server.login("aktesting4@gmail.com","eyubjzsayfrntshx")
+        SUBJECT="ABUSED ALERT!"
+        mg='Subject:{}\n\n{}'.format(SUBJECT, TEXT)
+        server.sendmail("aktesting4@gmail.com","{}".format(email),mg)
+        server.quit()
     return '200'
 
 @app.route("/submit",methods=['GET', 'POST'])
@@ -383,56 +410,56 @@ def submit():
         dummyarr.append(lines)
     
     #BADWORD
-    Name=chat_counter['senders'][0]
-    list1=[]
-    list2=[]
-    msg=""
-    TEXT=""
-    c=0
-    for x in chat_counter['words']:
-            list1.append(x[0])
-    file=open('bad-words.csv')
-    type(file)
-    csvreader=csv.reader(file)
-    header=[]
-    header=next(csvreader)
-    for row in csvreader:
-        list2.append(row[0])
-    list5=[]
-    list6=[]
-    list3=[]
-    for i in chat_counter['words']:
-        for j in list2:
-            if i[0]==j:
-                list5.append(j)
-    for k in list5:
-        h=1
-        for o in lini:
-            char=o.split()
-            for r in char:
-                if k==r:
-                    list6.append(h)
-            h=h+1
-    c=1
-    for i in list4:
-        for j in list6:
-            if c==j:
-             list3.append(i)
-        c=c+1
+    # Name=chat_counter['senders'][0]
+    # list1=[]
+    # list2=[]
+    # msg=""
+    # TEXT=""
+    # c=0
+    # for x in chat_counter['words']:
+    #         list1.append(x[0])
+    # file=open('bad-words.csv')
+    # type(file)
+    # csvreader=csv.reader(file)
+    # header=[]
+    # header=next(csvreader)
+    # for row in csvreader:
+    #     list2.append(row[0])
+    # list5=[]
+    # list6=[]
+    # list3=[]
+    # for i in chat_counter['words']:
+    #     for j in list2:
+    #         if i[0]==j:
+    #             list5.append(j)
+    # for k in list5:
+    #     h=1
+    #     for o in lini:
+    #         char=o.split()
+    #         for r in char:
+    #             if k==r:
+    #                 list6.append(h)
+    #         h=h+1
+    # c=1
+    # for i in list4:
+    #     for j in list6:
+    #         if c==j:
+    #          list3.append(i)
+    #     c=c+1
 
-    for (i,j) in itertools.zip_longest(list5,list3):
-        TEXT=TEXT+"ABUSIVE WORD RECEIVED:"+i+"  "+" TIME :"+str(j)+"\n" 
+    # for (i,j) in itertools.zip_longest(list5,list3):
+    #     TEXT=TEXT+"ABUSIVE WORD RECEIVED:"+i+"  "+" TIME :"+str(j)+"\n" 
 
-    TEXT="This is the Person abused me : "+Name[0]+"\n"+TEXT
-    #Mailer
-    qemail=request.form['email']
-    import smtplib
-    server=smtplib.SMTP_SSL("smtp.gmail.com",465)
-    server.login("aktesting4@gmail.com","eyubjzsayfrntshx")
-    SUBJECT="ABUSED ALERT!"
-    mg='Subject:{}\n\n{}'.format(SUBJECT, TEXT)
-    server.sendmail("aktesting4@gmail.com","{}".format(qemail),mg)
-    server.quit()
+    # TEXT="This is the Person abused me : "+Name[0]+"\n"+TEXT
+    # #Mailer
+    Email=request.form['email']
+    # import smtplib
+    # server=smtplib.SMTP_SSL("smtp.gmail.com",465)
+    # server.login("aktesting4@gmail.com","eyubjzsayfrntshx")
+    # SUBJECT="ABUSED ALERT!"
+    # mg='Subject:{}\n\n{}'.format(SUBJECT, TEXT)
+    # server.sendmail("aktesting4@gmail.com","{}".format(qemail),mg)
+    # server.quit()
 
     return render_template("analysis.html",name=dummyarr)
   else:
