@@ -364,7 +364,7 @@ def submit():
         Color.custom("▓▓▓", bold=True, fg_orange=True),
         Color.custom("███", bold=True, fg_red=True)
     ))
-    analyze=[a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33,a34,a41,a42,a35,a37,a38,a39,a40]
+    analyze=[a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20,a21,a22,a23,a24,a25,a26,a27,a28,a29,a30,a31,a32,a33,a34,a41,a42,a35]
     dummyarr=[]
     for i in analyze:
         lines= re.sub("[()'\[\]]","",str(i))
@@ -416,10 +416,10 @@ def submit():
     qemail=request.form['email']
     import smtplib
     server=smtplib.SMTP_SSL("smtp.gmail.com",465)
-    server.login("logeshfire6@gmail.com","jatxquxctpxcqklg")
+    server.login("aktesting4@gmail.com","eyubjzsayfrntshx")
     SUBJECT="ABUSED ALERT!"
     mg='Subject:{}\n\n{}'.format(SUBJECT, TEXT)
-    server.sendmail("logeshfire6@gmail.com","{}".format(qemail),mg)
+    server.sendmail("aktesting4@gmail.com","{}".format(qemail),mg)
     server.quit()
 
     return render_template("analysis.html",name=dummyarr)
