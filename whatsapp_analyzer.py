@@ -22,13 +22,25 @@ import csv
 from typing import Text, final
 import emoji
 from collections import Counter
-
+from whatsappSendMessage import sendMessage
 from flask import Flask,render_template,request
 
 app=Flask(__name__,template_folder='template')
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/webhook", methods=['GET', 'POST'])
+def webhook():
+    print(request.get_data())
+    message=request.form['Body']
+    senderID=request.form['From'].split('+')[1]
+    print(message)
+    print(senderID)
+    res = sendMessage(senderId=senderID, message=message)
+    print (res)
+    return '200'
+
 @app.route("/submit",methods=['GET', 'POST'])
 def submit():
   if request.method=='POST':
